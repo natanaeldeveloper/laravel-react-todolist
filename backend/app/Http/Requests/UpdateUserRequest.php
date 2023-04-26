@@ -22,7 +22,18 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|min:3|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:6|max:255'
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nome',
+            'email' => 'Email',
+            'password' => 'Senha',
         ];
     }
 }
