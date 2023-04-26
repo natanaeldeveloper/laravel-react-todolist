@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,18 +12,23 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if(Auth::attempt($credentials, $request->remember)) {
-
-            $token = $request->user()->createToken('User Login');
-
-            return response()->json([
-                'auth' => 'Ok',
-                'token' => $token->plainTextToken
-            ]);
+        if (!Auth::attempt($credentials, $request->remember)) {
+            throw new AuthenticationException('Credenciais inválidas!');
         }
 
+        $token = $request->user()->createToken($request->header('User-Agent'));
+
+        return response()
+            ->json(['message' => 'Autenticação bem sucedida!'], 200)
+            ->header('Authorization', 'Bearer ' . $token->plainTextToken);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
         return response()->json([
-            'auth' => 'Unauth'
+            'message' => 'Desconectado com sucesso!'
         ]);
     }
 }

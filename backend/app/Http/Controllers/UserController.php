@@ -16,7 +16,6 @@ class UserController extends Controller
         $users = User::orderBy('name')->get();
 
         return response()->json([
-            'status' => 200,
             'data' => $users,
         ]);
     }
@@ -30,7 +29,6 @@ class UserController extends Controller
         $user = User::create($data);
 
         return response()->json([
-            'status' => 201,
             'message' => 'Recurso cadastrado com sucesso!',
             'data' => $user,
         ], 201);
@@ -42,7 +40,6 @@ class UserController extends Controller
     public function show(User $user)
     {
         return response()->json([
-            'status' => 200,
             'data' => $user,
         ]);
     }
@@ -57,7 +54,6 @@ class UserController extends Controller
         $user->update($data);
 
         return response()->json([
-            'status' => 200,
             'message' => 'Recurso atualizado com sucesso!',
             'data' => $user,
         ], 200);
@@ -71,7 +67,6 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
-            'status' => 200,
             'message' => 'Recurso removido com sucesso!',
             'id' => $user->id,
         ], 200);
