@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -12,38 +13,67 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::orderBy('name')->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $users,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $data = $request->only('name', 'email', 'password');
+        $user = User::create($data);
+
+        return response()->json([
+            'status' => 201,
+            'message' => 'Recurso cadastrado com sucesso!',
+            'data' => $user,
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show(User $user)
     {
-        //
+        return response()->json([
+            'status' => 200,
+            'data' => $user,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data = $request->only('name', 'email', 'password');
+
+        $user->update($data);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Recurso atualizado com sucesso!',
+            'data' => $user,
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Recurso removido com sucesso!',
+            'id' => $user->id,
+        ], 200);
     }
 }
