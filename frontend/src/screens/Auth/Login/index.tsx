@@ -1,28 +1,34 @@
-import { Form, Input, Checkbox, Card, Row, Col, Button } from "antd"
-import { LoginOutlined } from "@ant-design/icons"
 import { useState } from "react"
+import { Form, Input, Card, Row, Col, Button, message } from "antd"
+import { LoginOutlined } from "@ant-design/icons"
+
 import AuthService from "../../../services/AuthService"
 
 const ScreenAuthLogin: React.FC = () => {
 
-  const [loading, setLoading] = useState(false)
+  const [formLoading, setFormLoading] = useState(false)
+  const [formErrors, setFormErrors] = useState('')
+  const [messageApi, contextHolder] = message.useMessage()
 
-  const submitForm = (values: object) => {
-    setLoading(true)
+  const onSubmit = (props: object) => {
+    setFormLoading(true)
+    setFormErrors('')
 
-    AuthService.login(values)
-      .then((resp) => {
-        console.log('finish', resp)
-        setLoading(false)
+    AuthService.login(props)
+      .then(resp => {
+        messageApi.success({
+          type: 'success',
+          content: resp.message
+        })
       })
-      .finally(() => {
-        setLoading(false)
-      })
+      .catch((err) => setFormErrors(err.response.data.message))
+      .finally(() => setFormLoading(false))
   }
 
   return (
-    <Row justify='center' style={{ marginTop: 27 }}>
-      <Col span={8} xs={20} sm={14} lg={10}>
+    <Row justify='center' style={{ marginTop: 50 }}>
+      {contextHolder}
+      <Col span={8} xs={20} sm={16} lg={10}>
         <Card
           title='Formulário de Login'
         >
@@ -30,11 +36,13 @@ const ScreenAuthLogin: React.FC = () => {
             name='login'
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
-            onFinish={submitForm}
+            onFinish={onSubmit}
           >
             <Form.Item
               label='Email'
               name='email'
+              validateStatus={formErrors && 'error'}
+              help={formErrors}
             >
               <Input />
             </Form.Item>
@@ -42,25 +50,17 @@ const ScreenAuthLogin: React.FC = () => {
             <Form.Item
               label='password'
               name='password'
+              validateStatus={formErrors && 'error'}
+              help={formErrors}
             >
               <Input.Password />
             </Form.Item>
 
-            <Form.Item
-              valuePropName='checked'
-              name='remember'
-              wrapperCol={{ offset: 5 }}
-            >
-              <Checkbox>Lembrar de mim</Checkbox>
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{ offset: 5 }}
-            >
+            <Form.Item wrapperCol={{ offset: 5 }}>
               <Button
                 type='primary'
                 htmlType='submit'
-                loading={loading}
+                loading={formLoading}
               >
                 Entrar <LoginOutlined />
               </Button>

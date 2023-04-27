@@ -19,8 +19,10 @@ class AuthController extends Controller
         $token = $request->user()->createToken($request->header('User-Agent'));
 
         return response()
-            ->json(['message' => 'Autenticação bem sucedida!'], 200)
-            ->header('Authorization', 'Bearer ' . $token->plainTextToken);
+            ->json([
+                'message' => 'Autenticação bem sucedida!',
+                'token' => $token->plainTextToken
+            ]);
     }
 
     public function logout(Request $request)
