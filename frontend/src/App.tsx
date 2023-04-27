@@ -1,10 +1,26 @@
-import { RouterProvider } from 'react-router-dom'
-import router from './Router'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-function App() {
+import ScreenHome from './screens/Home'
+import ScreenAuthLogin from './screens/Auth/Login'
+import ScreenAuthRegister from './screens/Auth/Register'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <ScreenHome />
+  },
+  {
+    path: 'auth/login',
+    element: <ScreenAuthLogin />
+  },
+  {
+    path: 'auth/register',
+    element: <ScreenAuthRegister />
+  }
+])
+
+export default function App() {
   return (
     <RouterProvider router={router} />
   )
 }
-
-export default App
