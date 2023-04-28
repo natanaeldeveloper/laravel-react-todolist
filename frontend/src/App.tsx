@@ -1,26 +1,33 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import ScreenHome from './screens/Home'
 import ScreenAuthLogin from './screens/auth/Login'
-import ScreenUserCreate from './screens/User/Create'
+import TokenService from './services/TokenService'
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <ScreenHome />
-  },
-  {
-    path: 'auth/login',
-    element: <ScreenAuthLogin />
-  },
-  {
-    path: 'users/create',
-    element: <ScreenUserCreate />
-  }
-])
+const RoutePrivate = ({ element, redirectTo }) => {
+  return TokenService.authenticated() ? element : <Navigate to={redirectTo} />
+}
 
-export default function App() {
+const App = () => {
   return (
-    <RouterProvider router={router} />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/auth/login' element={<ScreenAuthLogin />} />
+
+        <Route
+          path='/home'
+          element={
+            <RoutePrivate
+              redirectTo="/auth/login"
+              element={<ScreenHome />}
+            />
+          }
+        >
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
   )
 }
+
+export default App

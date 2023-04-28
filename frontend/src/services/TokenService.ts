@@ -1,15 +1,19 @@
 const TokenService = {
 
   set(token: string) {
-    localStorage.setItem('USER_TOKEN', token)
+    localStorage.setItem('TOKEN', token)
   },
 
   get() {
-    return localStorage.getItem('USER_TOKEN')
+    return localStorage.getItem('TOKEN')
+  },
+
+  authenticated() {
+    return localStorage.getItem('TOKEN') ? true : false
   },
 
   remove() {
-    localStorage.removeItem('USER_TOKEN')
+    localStorage.removeItem('TOKEN')
   }
 }
 

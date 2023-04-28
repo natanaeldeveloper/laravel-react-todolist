@@ -9,8 +9,8 @@ const AuthService = {
     return response.data
   },
 
-  logout: async (props: object) => {
-    const response = await api.post('auth/logout', props)
+  logout: async () => {
+    const response = await api.post('auth/logout')
     TokenService.remove()
     return response.data
   },
