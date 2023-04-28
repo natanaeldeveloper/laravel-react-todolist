@@ -1,18 +1,17 @@
 import { useState } from "react"
-import { Form, Input, Card, Row, Col, Button, message } from "antd"
 import { LoginOutlined } from "@ant-design/icons"
+import { Form, Input, Card, Row, Col, Button, message } from "antd"
+import { Link } from 'react-router-dom'
 
-import AuthService from "../../../services/AuthService"
+import AuthService from "../../services/AuthService"
 
 const ScreenAuthLogin: React.FC = () => {
 
   const [formLoading, setFormLoading] = useState(false)
-  const [formErrors, setFormErrors] = useState('')
   const [messageApi, contextHolder] = message.useMessage()
 
   const onSubmit = (props: object) => {
     setFormLoading(true)
-    setFormErrors('')
 
     AuthService.login(props)
       .then(resp => {
@@ -21,7 +20,12 @@ const ScreenAuthLogin: React.FC = () => {
           content: resp.message
         })
       })
-      .catch((err) => setFormErrors(err.response.data.message))
+      .catch(err => {
+        messageApi.error({
+          type: 'error',
+          content: err.response.data.message
+        })
+      })
       .finally(() => setFormLoading(false))
   }
 
@@ -37,24 +41,31 @@ const ScreenAuthLogin: React.FC = () => {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 18 }}
             onFinish={onSubmit}
+            validateMessages={{ required: '${alias} é obrigatório.' }}
           >
             <Form.Item
               label='Email'
               name='email'
-              validateStatus={formErrors && 'error'}
-              help={formErrors}
+              messageVariables={{ alias: 'Email' }}
+              rules={[{ required: true }]}
+
             >
               <Input />
             </Form.Item>
 
             <Form.Item
-              label='password'
+              label='Senha'
               name='password'
-              validateStatus={formErrors && 'error'}
-              help={formErrors}
+              messageVariables={{ alias: 'Senha' }}
+              rules={[{ required: true }]}
             >
               <Input.Password />
             </Form.Item>
+
+            <Col sm={{ offset: 5 }} style={{ marginBottom: 12 }}>
+              <span>Ainda não possue uma conta?</span>
+              <Link to='/users/create'>&nbsp;Realizar cadastro</Link>
+            </Col>
 
             <Form.Item wrapperCol={{ offset: 5 }}>
               <Button

@@ -5,7 +5,7 @@ const TokenService = {
   },
 
   get() {
-    localStorage.getItem('USER_TOKEN')
+    return localStorage.getItem('USER_TOKEN')
   },
 
   remove() {

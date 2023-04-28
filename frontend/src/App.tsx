@@ -1,8 +1,8 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import ScreenHome from './screens/Home'
-import ScreenAuthLogin from './screens/Auth/Login'
-import ScreenAuthRegister from './screens/Auth/Register'
+import ScreenAuthLogin from './screens/auth/Login'
+import ScreenUserCreate from './screens/User/Create'
 
 const router = createBrowserRouter([
   {
@@ -14,8 +14,8 @@ const router = createBrowserRouter([
     element: <ScreenAuthLogin />
   },
   {
-    path: 'auth/register',
-    element: <ScreenAuthRegister />
+    path: 'users/create',
+    element: <ScreenUserCreate />
   }
 ])
 
