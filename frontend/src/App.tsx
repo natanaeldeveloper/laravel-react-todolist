@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import ScreenHome from './screens/Home'
 import ScreenAuthLogin from './screens/auth/Login'
+import ScreenAuthRegister from './screens/auth/Register'
 import TokenService from './services/TokenService'
 
 const RoutePrivate = ({ element, redirectTo }) => {
@@ -12,13 +13,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/auth/login' element={<ScreenAuthLogin />} />
+        <Route path='/login' element={<ScreenAuthLogin />} />
+        <Route path='/register' element={<ScreenAuthRegister />} />
 
         <Route
           path='/home'
           element={
             <RoutePrivate
-              redirectTo="/auth/login"
+              redirectTo="/login"
               element={<ScreenHome />}
             />
           }

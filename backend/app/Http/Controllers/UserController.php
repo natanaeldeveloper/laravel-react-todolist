@@ -21,20 +21,6 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreUserRequest $request)
-    {
-        $data = $request->only('name', 'email', 'password');
-        $user = User::create($data);
-
-        return response()->json([
-            'message' => 'Recurso cadastrado com sucesso!',
-            'data' => $user,
-        ], 201);
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(User $user)

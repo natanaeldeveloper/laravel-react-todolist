@@ -16,10 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', App\Http\Controllers\UserController::class)
+        ->except('store')
         ->names('user');
 });
 
 Route::prefix('auth')->group(function () {
+
+    Route::post('register', [App\Http\Controllers\AuthController::class, 'register'])
+        ->name('auth.register');
+
     Route::post('login', [App\Http\Controllers\AuthController::class, 'login'])
         ->name('auth.login');
 

@@ -1,26 +1,35 @@
-import { useState } from "react"
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from 'react-router-dom'
 import { LoginOutlined } from "@ant-design/icons"
 import { Form, Input, Card, Row, Col, Button, message } from "antd"
 
-import UserService from "../../services/UserService"
+import AuthService from "../../services/AuthService"
+import TokenService from "../../services/TokenService"
 
-const ScreenUserCreate: React.FC = () => {
+const ScreenUserRegister: React.FC = () => {
 
   const [formLoading, setFormLoading] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const [errorFormFields, setErrorFormFields] = useState<any>({})
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if(TokenService.authenticated()) {
+      navigate('/home')
+    }
+  }, [])
 
   const onSubmit = (props: object) => {
     setFormLoading(true)
     setErrorFormFields({})
 
-    UserService.register(props)
+    AuthService.register(props)
       .then(resp => {
         messageApi.success({
           type: 'success',
           content: resp.message
         })
+        navigate('/home')
       })
       .catch(err => {
 
@@ -120,7 +129,7 @@ const ScreenUserCreate: React.FC = () => {
 
             <Col sm={{ offset: 7 }} style={{ marginBottom: 12 }}>
               <span>Já possue uma conta?</span>
-              <Link to='/auth/login'>&nbsp;Realizar login</Link>
+              <Link to='/login'>&nbsp;Realizar login</Link>
             </Col>
 
             <Form.Item wrapperCol={{ sm: { offset: 7 } }}>
@@ -139,4 +148,4 @@ const ScreenUserCreate: React.FC = () => {
   )
 }
 
-export default ScreenUserCreate
+export default ScreenUserRegister

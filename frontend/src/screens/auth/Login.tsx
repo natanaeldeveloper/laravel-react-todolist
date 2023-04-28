@@ -73,7 +73,7 @@ const ScreenAuthLogin: React.FC = () => {
 
             <Col sm={{ offset: 5 }} style={{ marginBottom: 12 }}>
               <span>Ainda não possue uma conta?</span>
-              <Link to='/users/create'>&nbsp;Realizar cadastro</Link>
+              <Link to='/register'>&nbsp;Realizar cadastro</Link>
             </Col>
 
             <Form.Item wrapperCol={{ offset: 5 }}>
