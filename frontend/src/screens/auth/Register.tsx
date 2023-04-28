@@ -13,12 +13,6 @@ const ScreenUserRegister: React.FC = () => {
   const [errorFormFields, setErrorFormFields] = useState<any>({})
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if(TokenService.authenticated()) {
-      navigate('/home')
-    }
-  }, [])
-
   const onSubmit = (props: object) => {
     setFormLoading(true)
     setErrorFormFields({})
@@ -29,7 +23,7 @@ const ScreenUserRegister: React.FC = () => {
           type: 'success',
           content: resp.message
         })
-        navigate('/home')
+        navigate('/dashboard')
       })
       .catch(err => {
 

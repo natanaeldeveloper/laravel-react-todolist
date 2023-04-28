@@ -12,12 +12,6 @@ const ScreenAuthLogin: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if(TokenService.authenticated()) {
-      navigate('/home')
-    }
-  }, [])
-
   const onSubmit = (props: object) => {
     setFormLoading(true)
 
@@ -27,7 +21,7 @@ const ScreenAuthLogin: React.FC = () => {
           type: 'success',
           content: resp.message
         })
-        navigate('/home')
+        navigate('/dashboard')
       })
       .catch(err => {
         messageApi.error({
