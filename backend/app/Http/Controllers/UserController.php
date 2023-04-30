@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -12,13 +13,17 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('name')->get();
+        $users = User::query();
 
-        return response()->json([
-            'data' => $users,
-        ]);
+        if ($request->input('filters.email')) {
+            $users->where('email', 'ilike','%' . $request->input('filters.email')[0] . '%');
+        }
+
+        $users = $users->select('id', 'email')->orderBy('email')->paginate(10);
+
+        return response()->json($users);
     }
 
     /**
@@ -50,7 +55,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if(Auth::user()->id !== $user->id) {
+        if (Auth::user()->id !== $user->id) {
             throw new AuthorizationException('Você não tem permissão para realizar esta operação!');
         }
 

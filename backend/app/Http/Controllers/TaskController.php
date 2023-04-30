@@ -23,11 +23,11 @@ class TaskController extends Controller
         }
 
         if ($request->has('filters.date_conclusion')) {
-            $tasks->where('date_conclusion', $request->input('filters.date_conclusion')[0]);
+            $tasks->whereDate('date_conclusion', $request->input('filters.date_conclusion')[0]);
         }
 
         if ($request->has('filters.created_at')) {
-            $tasks->where('created_at', $request->input('filters.created_at')[0]);
+            $tasks->whereDate('created_at', $request->input('filters.created_at')[0]);
         }
 
         if ($request->has('filters.responsible')) {
