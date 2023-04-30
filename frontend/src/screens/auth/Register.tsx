@@ -1,42 +1,50 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link, useNavigate } from 'react-router-dom'
 import { LoginOutlined } from "@ant-design/icons"
 import { Form, Input, Card, Row, Col, Button, message } from "antd"
 
-import AuthService from "../../services/AuthService"
-import TokenService from "../../services/TokenService"
+import { setToken } from "../../services/auth"
+import api from "../../services/api"
 
-const ScreenUserRegister: React.FC = () => {
+const ScreenUserRegister = () => {
 
   const [formLoading, setFormLoading] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const [errorFormFields, setErrorFormFields] = useState<any>({})
   const navigate = useNavigate()
 
-  const onSubmit = (props: object) => {
+  const onSubmit = (params: object) => {
     setFormLoading(true)
     setErrorFormFields({})
 
-    AuthService.register(props)
-      .then(resp => {
+    api.post('auth/register', params)
+      .then(response => response.data)
+      .then(response => {
+
+        setToken(response.token)
+
         messageApi.success({
           type: 'success',
-          content: resp.message
+          content: response.message
         })
-        navigate('/dashboard')
+
+        setTimeout(() => {
+          navigate('/dashboard')
+        }, 2000)
       })
-      .catch(err => {
+      .catch(error => {
 
-        const resp = err.response.data
+        const response = error.response.data
 
-        if (resp?.message) {
+        if (response?.message) {
           messageApi.error({
             type: 'error',
-            content: resp.message
+            content: response.message
           })
         }
-        if (resp?.errors) {
-          setErrorFormFields(resp.errors)
+
+        if (response?.errors) {
+          setErrorFormFields(response.errors)
         }
       })
       .finally(() => setFormLoading(false))

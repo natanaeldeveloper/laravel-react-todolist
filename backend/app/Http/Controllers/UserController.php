@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -36,7 +37,6 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->only('name', 'email', 'password');
-
         $user->update($data);
 
         return response()->json([
@@ -50,6 +50,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if(Auth::user()->id !== $user->id) {
+            throw new AuthorizationException('Você não tem permissão para realizar esta operação!');
+        }
+
         $user->delete();
 
         return response()->json([

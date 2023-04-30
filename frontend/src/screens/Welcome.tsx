@@ -1,5 +1,5 @@
 
-const Welcome: React.FC = () => {
+const Welcome = () => {
   return (
     <section>
       Welcome

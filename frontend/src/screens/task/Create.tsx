@@ -1,5 +1,5 @@
 
-const ScreenTaskCreate: React.FC = () => {
+const ScreenTaskCreate = () => {
   return (
     <section>
       Create Task

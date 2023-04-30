@@ -1,5 +1,5 @@
 
-const ScreenUserEdit: React.FC = () => {
+const ScreenUserEdit = () => {
   return (
     <section>
       Edit user

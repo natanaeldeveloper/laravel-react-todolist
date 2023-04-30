@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,14 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
+        $data_inicial = Carbon::createFromDate(2023, 4, 1);
+        $data_final = Carbon::createFromDate(2023, 4, 30);
+
         return [
-            //
+            'description' => fake()->sentence(6),
+            'date_conclusion' => fake()->dateTimeBetween($data_inicial, $data_final),
+            'created_at' => fake()->dateTimeBetween($data_inicial, $data_final),
+            'responsible_id' => User::inRandomOrder()->first()->id,
         ];
     }
 }

@@ -1,69 +1,83 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { MenuProps, Menu } from 'antd';
+import { MenuProps, Menu } from 'antd'
 import {
   UserOutlined,
   LogoutOutlined,
   UnorderedListOutlined,
   SearchOutlined,
-  SettingOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  ProfileOutlined
 } from '@ant-design/icons';
+import { removeToken } from '../services/auth'
+import api from '../services/api';
 
-import AuthService from '../services/AuthService';
+type MenuItem = Required<MenuProps>['items'][number]
 
-type MenuItem = Required<MenuProps>['items'][number];
+const App = () => {
 
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  onClick?: () => void,
-  type?: 'group',
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-    onClick
-  } as MenuItem;
-}
-
-const App: React.FC = () => {
-
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [openKeys, setOpenKeys] = useState<string[]>([])
   const navigate = useNavigate()
 
   const logout = () => {
-    AuthService.logout()
-      .then(() => {
+    api.post('auth/logout', {})
+      .finally(() => {
+        removeToken()
         navigate('/login')
       })
   }
 
   const items: MenuItem[] = [
-    getItem('Tarefas', 'sub1', <UnorderedListOutlined />, [
-      getItem('Lista de tarefas', '1', <SearchOutlined />, undefined, () => { navigate('tasks') }),
-      getItem('Nova tarefa', '2', <PlusCircleOutlined />, undefined, () => { navigate('tasks/create') }),
-    ]),
-    getItem('Usuário', 'sub2', <UserOutlined />, [
-      getItem('Lista de usuários', '3', <SearchOutlined />, undefined, () => { navigate('users') }),
-      getItem('Editar Perfil', '4', <UserOutlined />, undefined, () => { navigate('profile') }),
-    ]),
-    getItem('Sair', 'sub3', <LogoutOutlined />, undefined, logout),
+    {
+      label: 'Tarefas',
+      key: 'sub1',
+      icon: <UnorderedListOutlined />,
+      children: [
+        {
+          label: 'Lista de tarefas',
+          key: '1',
+          icon: <SearchOutlined />,
+          onClick() { navigate('tasks') }
+        },
+        {
+          label: 'Nova tarefa',
+          key: '2',
+          icon: <PlusCircleOutlined />,
+          onClick() { navigate('tasks/create') }
+        }
+      ]
+    },
+    {
+      label: 'Usuário',
+      key: 'sub2',
+      icon: <UserOutlined />,
+      children: [
+        {
+          label: 'Seus dados',
+          key: '4',
+          icon: <ProfileOutlined />,
+          onClick() { navigate('profile') }
+        }
+      ]
+    },
+    {
+      label: 'Sair',
+      key: '5',
+      icon: <LogoutOutlined />,
+      onClick: logout,
+    },
   ];
 
   return (
-    <Menu
-      mode="inline"
-      openKeys={openKeys}
-      onOpenChange={(keys) => setOpenKeys(keys)}
-      style={{ width: 256, height: '100vh' }}
-      items={items}
-    />
+    <>
+      <Menu
+        mode="inline"
+        openKeys={openKeys}
+        onOpenChange={(keys) => setOpenKeys(keys)}
+        style={{ height: '100vh' }}
+        items={items}
+      />
+    </>
   );
 };
 

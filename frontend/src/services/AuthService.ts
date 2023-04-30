@@ -1,24 +1,27 @@
 import api from "./api"
-import TokenService from './TokenService'
+import { removeToken, setToken } from './auth'
 
 const AuthService = {
 
   register: async (props: object) => {
     const response = await api.post('auth/register', props)
-    TokenService.set(response.data.token)
+    setToken(response.data.token)
     return response.data
   },
 
   login: async (props: object) => {
     const response = await api.post('auth/login', props)
-    TokenService.set(response.data.token)
+    setToken(response.data.token)
     return response.data
   },
 
   logout: async () => {
-    const response = await api.post('auth/logout', {})
-    TokenService.remove()
-    return response.data
+    try {
+      const response = await api.post('auth/logout', {})
+      return response.data
+    } finally {
+      removeToken()
+    }
   },
 }
 

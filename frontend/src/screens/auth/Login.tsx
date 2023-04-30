@@ -1,32 +1,39 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { LoginOutlined } from "@ant-design/icons"
 import { Form, Input, Card, Row, Col, Button, message } from "antd"
 import { Link, useNavigate } from 'react-router-dom'
 
-import AuthService from "../../services/AuthService"
-import TokenService from "../../services/TokenService"
+import { setToken } from "../../services/auth"
+import api from "../../services/api"
 
-const ScreenAuthLogin: React.FC = () => {
+const ScreenAuthLogin = () => {
 
   const [formLoading, setFormLoading] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
 
-  const onSubmit = (props: object) => {
+  const onSubmit = (params: object) => {
     setFormLoading(true)
 
-    AuthService.login(props)
-      .then(resp => {
+    api.post('auth/login', params)
+      .then(response => response.data)
+      .then(response => {
+
+        setToken(response.token)
+
         messageApi.success({
           type: 'success',
-          content: resp.message
+          content: response?.message
         })
-        navigate('/dashboard')
+
+        setTimeout(() => {
+          navigate('/dashboard')
+        }, 1000)
       })
-      .catch(err => {
+      .catch(error => {
         messageApi.error({
           type: 'error',
-          content: err.response.data.message
+          content: error.response.data?.message
         })
       })
       .finally(() => setFormLoading(false))

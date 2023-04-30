@@ -3,23 +3,31 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Root from './screens/Root'
 import ScreenAuthLogin from './screens/auth/Login'
 import ScreenAuthRegister from './screens/auth/Register'
-import TokenService from './services/TokenService'
 import ScreenTaskList from './screens/task/List'
-
-import './styles/App.css'
 import Welcome from './screens/Welcome'
 import ScreenTaskCreate from './screens/task/Create'
 import ScreenUserEdit from './screens/user/Edit'
-import ScreenUserList from './screens/user/List'
+
+import { getToken } from './services/auth'
+
+import './styles/App.css'
+import ScreenTaskEdit from './screens/task/Edit'
+import api from './services/api'
+
 
 const App = () => {
 
   const RoutePrivate = ({ children }) => {
-    return TokenService.authenticated() ? children : <Navigate to='/login' />
+    return getToken() ? children : <Navigate to='/login' />
   }
 
   const RoutesLoggedOut = ({ children }) => {
-    return !TokenService.authenticated() ? children : <Navigate to='/dashboard' />
+    return !getToken() ? children : <Navigate to='/dashboard' />
+  }
+
+  const fetchTask = async (taskId) => {
+    const response = await api.get(`tasks/${taskId}`)
+    return response.data.data
   }
 
   return (
@@ -43,10 +51,18 @@ const App = () => {
           }
         />
         <Route path='dashboard' element={<RoutePrivate> <Root /> </RoutePrivate>} >
-          <Route path='tasks' element={<ScreenTaskList />} />
-          <Route path='tasks/create' element={<ScreenTaskCreate />} />
+          <Route
+            path='tasks/:taskId/edit'
+            element={<ScreenTaskEdit />}
+            loader={({ params }) => (
+              fetchTask(params.taskId)
+            )}
+          />
 
-          <Route path='users' element={<ScreenUserList />} />
+          <Route path='tasks/create' element={<ScreenTaskCreate />} />
+          <Route path='tasks' element={<ScreenTaskList />} />
+
+          <Route path='users/profile' element={<ScreenUserEdit />} />
           <Route path='profile' element={<ScreenUserEdit />} />
         </Route>
       </Routes>

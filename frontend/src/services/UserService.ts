@@ -1,5 +1,5 @@
 import api from "./api"
-import TokenService from './TokenService'
+import TokenService from './auth'
 
 const UserService = {
 

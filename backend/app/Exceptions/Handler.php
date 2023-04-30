@@ -2,9 +2,12 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Throwable;
@@ -33,16 +36,18 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (Throwable $e, Request $request) {
 
-            if($e instanceof NotFoundHttpException) {
-                return response()->json([
-                    'message' => 'Recurso não encontrado!',
-                ], 404);
-            }
+            if (env('APP_DEBUG') === FALSE) {
+                if ($e instanceof NotFoundHttpException) {
+                    return response()->json([
+                        'message' => 'Recurso não encontrado!',
+                    ], 404);
+                }
 
-            if($e instanceof AuthenticationException) {
-                return response()->json([
-                    'message' => $e->getMessage(),
-                ], 401);
+                if ($e instanceof InternalErrorException || $e instanceof QueryException) {
+                    return response()->json([
+                        'message' => 'Falha de processamento do servidor!',
+                    ], 500);
+                }
             }
         });
     }

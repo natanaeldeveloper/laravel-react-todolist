@@ -28,7 +28,7 @@ class Authenticate extends Middleware
     protected function unauthenticated($request, array $guards)
     {
         throw new AuthenticationException(
-            'Acesso ao recurso não autorizado!', $guards, $this->redirectTo($request)
+            'Autenticação necessária', $guards, $this->redirectTo($request)
         );
     }
 }

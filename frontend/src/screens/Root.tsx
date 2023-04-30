@@ -1,13 +1,18 @@
 import { Outlet } from "react-router-dom"
+import { Col, Row } from "antd"
 
 import Navbar from "../components/Navbar"
-import { Row } from "antd"
 
-const Root: React.FC = () => {
+const Root = () => {
+
   return (
     <Row>
-      <Navbar />
-      <Outlet />
+      <Col xs={{ span: 4 }}>
+        <Navbar />
+      </Col>
+      <Col xs={{ span: 20 }} style={{ padding: '1rem' }}>
+        <Outlet />
+      </Col>
     </Row>
   )
 }

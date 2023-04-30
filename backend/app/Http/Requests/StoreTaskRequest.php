@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -22,7 +23,18 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'description' => 'required|min:3|max:255',
+            'date_conclusion' => 'date',
+            'responsible_id' => 'required|exists:users,id',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'description' => 'Descrição',
+            'date_conclusion' => 'Data conclusão',
+            'responsible_id' => 'Responsável',
         ];
     }
 }
