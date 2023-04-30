@@ -32,16 +32,6 @@ function DebounceSelect<
         setOptions(newOptions);
         setFetching(false);
       });
-
-      fetchOptions(value).then((newOptions) => {
-        if (fetchId !== fetchRef.current) {
-          // for fetch callback order
-          return;
-        }
-
-        setOptions(newOptions);
-        setFetching(false);
-      });
     };
 
     return debounce(loadOptions, debounceTimeout)
