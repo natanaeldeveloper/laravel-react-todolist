@@ -64,7 +64,7 @@ const ScreenAuthRegister = () => {
   return (
     <Row justify='center' style={{ marginTop: 50 }}>
       {contextHolder}
-      <Col span={8} xs={24} sm={20} md={16} lg={12}>
+      <Col span={8} xs={20} sm={20} md={16} lg={12}>
         <Card
           title='Formulário de Registro'
         >
