@@ -38,7 +38,6 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required|min:3|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $this->route('user')->id,
-            'password' => 'required|min:6|max:255'
         ];
     }
 
@@ -47,7 +46,6 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'nome',
             'email' => 'email',
-            'password' => 'senha',
         ];
     }
 }

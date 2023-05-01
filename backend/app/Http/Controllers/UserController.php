@@ -21,7 +21,7 @@ class UserController extends Controller
             $users->where('email', 'ilike','%' . $request->input('filters.email')[0] . '%');
         }
 
-        $users = $users->select('id', 'email')->orderBy('email')->paginate(10);
+        $users = $users->orderBy('email')->paginate(10);
 
         return response()->json($users);
     }
@@ -45,7 +45,7 @@ class UserController extends Controller
         $user->update($data);
 
         return response()->json([
-            'message' => 'Recurso atualizado com sucesso!',
+            'message' => 'Dados do usuário atualizados com sucesso!',
             'data' => $user,
         ], 200);
     }
@@ -62,7 +62,7 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
-            'message' => 'Recurso removido com sucesso!',
+            'message' => 'Conta excluída com sucesso!',
             'id' => $user->id,
         ], 200);
     }

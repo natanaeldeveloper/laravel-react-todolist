@@ -16,7 +16,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $tasks = Task::query();
-        $per_page = $request->input('per_page') ? $request->input('per_page') : 10;
+        $per_page = $request->input('per_page') ? $request->input('per_page') : 7;
 
         if ($request->has('filters.description')) {
             $tasks->where('description', 'ilike', '%' . $request->input('filters.description')[0] . '%');
@@ -34,7 +34,7 @@ class TaskController extends Controller
             $tasks->whereHas('responsible', function ($query) use ($request) {
                 $query->where(function ($query) use ($request) {
                     $query->where('email', 'ilike', '%' . $request->input('filters.responsible')[0] . '%')
-                        ->whereOr('name', 'ilike', '%' . $request->input('filters.responsible')[0] . '%');
+                        ->orWhere('name', 'ilike', '%' . $request->input('filters.responsible')[0] . '%');
                 });
             });
         }

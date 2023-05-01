@@ -1,19 +1,50 @@
-import { Outlet } from "react-router-dom"
-import { Col, Row } from "antd"
+import { useEffect } from 'react'
+import { Outlet, useLocation } from "react-router-dom"
+import { Col, Row, message } from "antd"
 
 import Navbar from "../components/Navbar"
 
+interface StateProps {
+  message?: {
+    type: string;
+    content: string;
+  }
+}
+
 const Root = () => {
 
+  const { state } = useLocation()
+  const [messageApi, contextHolder] = message.useMessage()
+
+  useEffect(() => {
+    if (state?.message) {
+
+      if (state.message.type == 'success') {
+        messageApi.success({
+          type: state.message.type,
+          content: state.message.content
+        })
+      }
+
+      if (state.message.type == 'error') {
+        messageApi.error({
+          type: state.message.type,
+          content: state.message.content
+        })
+      }
+    }
+  }, [])
+
   return (
-    <Row>
-      <Col xs={{ span: 4 }}>
+    <div style={{ display: 'flex', flexFlow: 'row row' }}>
+      {contextHolder}
+      <div style={{ minWidth: 230 }}>
         <Navbar />
-      </Col>
-      <Col xs={{ span: 20 }} style={{ padding: '1rem' }}>
+      </div>
+      <div style={{ overflow: 'auto', width: '100%'}}>
         <Outlet />
-      </Col>
-    </Row>
+      </div>
+    </div>
   )
 }
 

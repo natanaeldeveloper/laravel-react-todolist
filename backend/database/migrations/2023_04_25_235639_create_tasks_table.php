@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->foreignId('responsible_id')->nullable();
+            $table->foreignId('responsible_id');
             $table->date('date_conclusion');
             $table->timestamps();
 
             $table->foreign('responsible_id')
                 ->references('id')
                 ->on('users')
-                ->nullOnDelete();
+                ->cascadeOnDelete();
         });
     }
 

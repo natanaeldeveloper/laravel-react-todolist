@@ -1,9 +1,9 @@
-import { useState } from "react"
-import { LoginOutlined } from "@ant-design/icons"
+import { useEffect, useState } from "react"
+import { LoginOutlined, FastBackwardOutlined } from "@ant-design/icons"
 import { Form, Input, Card, Row, Col, Button, message } from "antd"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { setToken } from "../../services/auth"
+import { setID, setToken } from "../../services/auth"
 import api from "../../services/api"
 
 const ScreenAuthLogin = () => {
@@ -11,33 +11,62 @@ const ScreenAuthLogin = () => {
   const [formLoading, setFormLoading] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
+  const { state } = useLocation()
 
   const onSubmit = (params: object) => {
     setFormLoading(true)
 
     api.post('auth/login', params)
-      .then(response => response.data)
-      .then(response => {
+      .then(res => res.data)
+      .then(res => {
 
-        setToken(response.token)
+        setToken(res.token)
+        setID(res.id)
 
         messageApi.success({
           type: 'success',
-          content: response?.message
+          content: res.message
         })
 
-        setTimeout(() => {
-          navigate('/dashboard')
-        }, 1000)
+        navigate('/dashboard/tasks', {
+          state: {
+            message: {
+              type: 'success',
+              content: res.message
+            }
+          }
+        })
       })
       .catch(error => {
-        messageApi.error({
-          type: 'error',
-          content: error.response.data?.message
-        })
+        const res = error.response.data
+        if (res?.message) {
+          messageApi.error({
+            type: 'error',
+            content: res.message
+          })
+        }
       })
       .finally(() => setFormLoading(false))
   }
+
+  useEffect(() => {
+    if (state?.message) {
+
+      if (state.message.type == 'success') {
+        messageApi.success({
+          type: state.message.type,
+          content: state.message.content
+        })
+      }
+
+      if (state.message.type == 'error') {
+        messageApi.error({
+          type: state.message.type,
+          content: state.message.content
+        })
+      }
+    }
+  }, [state])
 
   return (
     <Row justify='center' style={{ marginTop: 50 }}>
@@ -72,9 +101,14 @@ const ScreenAuthLogin = () => {
               <Input.Password />
             </Form.Item>
 
-            <Col sm={{ offset: 5 }} style={{ marginBottom: 12 }}>
+            <Col sm={{ offset: 5 }} style={{ marginBottom: 5 }}>
               <span>Ainda não possue uma conta?</span>
-              <Link to='/register'>&nbsp;Realizar cadastro</Link>
+              <Link to='/register'>&nbsp;Realizar cadastro.</Link>
+            </Col>
+
+            <Col sm={{ offset: 5 }} style={{ marginBottom: 16 }}>
+              <span>Voltar para a página inicial</span>
+              <Link to='/'>&nbsp; clique aqui.</Link>
             </Col>
 
             <Form.Item wrapperCol={{ offset: 5 }}>

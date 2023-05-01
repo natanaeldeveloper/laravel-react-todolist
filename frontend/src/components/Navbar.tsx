@@ -9,21 +9,29 @@ import {
   PlusCircleOutlined,
   ProfileOutlined
 } from '@ant-design/icons';
-import { removeToken } from '../services/auth'
+import { removeID, removeToken } from '../services/auth'
 import api from '../services/api';
 
 type MenuItem = Required<MenuProps>['items'][number]
 
 const App = () => {
 
-  const [openKeys, setOpenKeys] = useState<string[]>([])
+  const [openKeys, setOpenKeys] = useState<string[]>(['sub1'])
   const navigate = useNavigate()
 
   const logout = () => {
     api.post('auth/logout', {})
       .finally(() => {
         removeToken()
-        navigate('/login')
+        removeID()
+        navigate('/', {
+          state: {
+            message: {
+              type: 'success',
+              content: 'sessão encerrada com sucesso!'
+            }
+          }
+        })
       })
   }
 
@@ -73,6 +81,7 @@ const App = () => {
       <Menu
         mode="inline"
         openKeys={openKeys}
+        defaultSelectedKeys={['1']}
         onOpenChange={(keys) => setOpenKeys(keys)}
         style={{ height: '100vh' }}
         items={items}

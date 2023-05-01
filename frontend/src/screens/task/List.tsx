@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Space, Table, Avatar, message, Tag, Popconfirm, Row } from 'antd';
+import { Button, Input, Space, Table, Avatar, message, Tag, Popconfirm, Row, Col, Card } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import type { FilterDropdownProps, SorterResult } from 'antd/es/table/interface';
 import { SearchOutlined, DeleteOutlined, EditOutlined, CalendarOutlined } from '@ant-design/icons'
@@ -84,7 +84,7 @@ const ScreenTaskList: React.FC = () => {
     {
       title: 'Descrição',
       dataIndex: 'description',
-      width: '30%',
+      width: '35%',
       render: (text) => (
         searchedColumn === 'description' ? (
           <TextHighlight
@@ -167,7 +167,7 @@ const ScreenTaskList: React.FC = () => {
       title: 'Ação',
       dataIndex: 'action',
       align: 'center',
-      width: '15%',
+      width: '10%',
       render: (_, record) => (
         <Space>
           <Link to={`${record.id}/edit`}><Button shape='circle' size='middle'><EditOutlined /></Button></Link>
@@ -278,19 +278,24 @@ const ScreenTaskList: React.FC = () => {
   }, [state])
 
   return (
-    <>
+    <Row justify={'center'} style={{ marginTop: 10 }}>
       {contextHolder}
-      <Table
-        size='small'
-        columns={columns}
-        rowKey={(record) => record.id}
-        dataSource={data}
-        pagination={tableParams?.pagination}
-        loading={loading}
-        onChange={handleTableChange}
-      />
-      <Outlet />
-    </>
+      <Col lg={{ span: 23 }}>
+        <Card>
+          <Table
+            style={{ width: '100%' }}
+            size='small'
+            columns={columns}
+            rowKey={(record) => record.id}
+            dataSource={data}
+            pagination={tableParams?.pagination}
+            loading={loading}
+            onChange={handleTableChange}
+          />
+        </Card>
+        <Outlet />
+      </Col>
+    </Row>
   );
 };
 

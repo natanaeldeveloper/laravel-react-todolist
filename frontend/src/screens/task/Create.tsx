@@ -67,7 +67,7 @@ const ScreenTaskCreate = () => {
   return (
     <>
       {contextHolder}
-      <Row justify={"center"}>
+      <Row justify={"center"} style={{ marginTop: 50 }}>
         <Col md={{ span: 18 }} span={24}>
           <Card
             title="Nova tarefa"
@@ -109,6 +109,7 @@ const ScreenTaskCreate = () => {
                   placeholder="email do responsável"
                   fetchOptions={fetchUserList}
                   onChange={setSearchedValue}
+                  defaultOptions={[]}
                   style={{ width: '100%' }}
                 />
               </Form.Item>

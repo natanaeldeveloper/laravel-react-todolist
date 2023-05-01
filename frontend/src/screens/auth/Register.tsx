@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { LoginOutlined } from "@ant-design/icons"
 import { Form, Input, Card, Row, Col, Button, message } from "antd"
 
-import { setToken } from "../../services/auth"
+import { setID, setToken } from "../../services/auth"
 import api from "../../services/api"
 
 const ScreenAuthRegister = () => {
@@ -18,33 +18,39 @@ const ScreenAuthRegister = () => {
     setErrorFormFields({})
 
     api.post('auth/register', params)
-      .then(response => response.data)
-      .then(response => {
+      .then(res => res.data)
+      .then(res => {
 
-        setToken(response.token)
+        setToken(res.token)
+        setID(res.data.id)
 
         messageApi.success({
           type: 'success',
-          content: response.message
+          content: res.message
         })
 
-        setTimeout(() => {
-          navigate('/dashboard')
-        }, 2000)
+        navigate('/dashboard/tasks', {
+          state: {
+            message: {
+              type: 'success',
+              content: res.message
+            }
+          }
+        })
       })
       .catch(error => {
 
-        const response = error.response.data
+        const res = error.response.data
 
-        if (response?.message) {
+        if (res?.message) {
           messageApi.error({
             type: 'error',
-            content: response.message
+            content: res.message
           })
         }
 
-        if (response?.errors) {
-          setErrorFormFields(response.errors)
+        if (res?.errors) {
+          setErrorFormFields(res.errors)
         }
       })
       .finally(() => setFormLoading(false))
@@ -129,9 +135,14 @@ const ScreenAuthRegister = () => {
               <Input.Password />
             </Form.Item>
 
-            <Col sm={{ offset: 7 }} style={{ marginBottom: 12 }}>
+            <Col sm={{ offset: 7 }} style={{ marginBottom: 5 }}>
               <span>Já possue uma conta?</span>
               <Link to='/login'>&nbsp;Realizar login</Link>
+            </Col>
+
+            <Col sm={{ offset: 7 }} style={{ marginBottom: 16 }}>
+              <span>Voltar para a página inicial</span>
+              <Link to='/'>&nbsp; clique aqui.</Link>
             </Col>
 
             <Form.Item wrapperCol={{ sm: { offset: 7 } }}>

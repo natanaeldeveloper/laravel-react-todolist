@@ -40,7 +40,8 @@ class AuthController extends Controller
         return response()
             ->json([
                 'message' => 'Autenticação bem sucedida!',
-                'token' => $token->plainTextToken
+                'token' => $token->plainTextToken,
+                'id' => Auth::user()->id,
             ]);
     }
 

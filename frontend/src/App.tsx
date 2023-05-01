@@ -13,14 +13,15 @@ import ScreenTaskCreate from "./screens/task/Create";
 import ScreenTaskList from "./screens/task/List";
 import ScreenUserEdit from "./screens/user/Edit";
 import { getToken } from "./services/auth";
-import api from "./services/api";
+import ScreenUserDelete from "./screens/user/Delete";
+import NotFound from "./screens/error/NotFound";
 
 const RoutePrivate = ({ children }) => {
   return getToken() ? children : <Navigate to='/login' />
 }
 
 const RoutesLoggedOut = ({ children }) => {
-  return !getToken() ? children : <Navigate to='/dashboard' />
+  return !getToken() ? children : <Navigate to='/dashboard/tasks' />
 }
 
 const router = createBrowserRouter([
@@ -68,9 +69,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <ScreenUserEdit />
+        element: <ScreenUserEdit />,
+        children: [
+          {
+            path: 'delete',
+            element: <ScreenUserDelete />
+          }
+        ]
       },
     ]
+  },
+  {
+    path: '/*',
+    element: <NotFound />
   }
 ])
 

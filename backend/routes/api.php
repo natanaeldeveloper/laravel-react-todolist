@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* rota para validação do token */
+
 Route::get('token/validate')->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {

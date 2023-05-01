@@ -10,3 +10,15 @@ export const getToken = () => {
 export const removeToken = () => {
   localStorage.removeItem('TOKEN')
 }
+
+export const setID = (id: string) => {
+  localStorage.setItem('ID', id)
+}
+
+export const getID = () => {
+  return localStorage.getItem('ID')
+}
+
+export const removeID = () => {
+  localStorage.removeItem('ID')
+}
