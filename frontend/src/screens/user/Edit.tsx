@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons"
-import { Form, Input, Card, Row, Col, Button, message, Skeleton, Popconfirm } from "antd"
+import { Form, Input, Card, Row, Col, Button, message, Skeleton } from "antd"
 
 import api from "../../services/api"
 import { getID } from "../../services/auth"

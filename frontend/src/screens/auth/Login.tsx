@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { LoginOutlined, FastBackwardOutlined } from "@ant-design/icons"
+import { LoginOutlined } from "@ant-design/icons"
 import { Form, Input, Card, Row, Col, Button, message } from "antd"
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 

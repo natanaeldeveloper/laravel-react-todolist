@@ -1,15 +1,8 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from "react-router-dom"
-import { Col, Row, message } from "antd"
+import { message } from "antd"
 
 import Navbar from "../components/Navbar"
-
-interface StateProps {
-  message?: {
-    type: string;
-    content: string;
-  }
-}
 
 const Root = () => {
 
