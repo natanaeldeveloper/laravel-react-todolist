@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Space, Table, Avatar, message, Tag } from 'antd';
+import { Button, Input, Space, Table, Avatar, message, Tag, Popconfirm, Row } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import type { FilterDropdownProps, SorterResult } from 'antd/es/table/interface';
 import { SearchOutlined, DeleteOutlined, EditOutlined, CalendarOutlined } from '@ant-design/icons'
 import TextHighlight from 'react-highlight-words';
 import api from '../../services/api';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 interface DataType {
   id: string;
-  description: string;
-  data_conclusion: string;
-  created_at: string;
+  description?: string;
+  data_conclusion?: string;
+  created_at?: string;
   responsible: {
     name: string;
     email: string;
@@ -19,7 +21,7 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-const App: React.FC = () => {
+const ScreenTaskList: React.FC = () => {
 
   const [messageApi, contextHolder] = message.useMessage()
   const [data, setData] = useState<DataType[]>();
@@ -27,6 +29,7 @@ const App: React.FC = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const [searchedText, setSearchedText] = useState('');
   const [tableParams, setTableParams] = useState<TableProps<DataType>>();
+  const { state } = useLocation()
 
   const getColumnSearchProps = (dataIndex: DataIndex, type: 'text' | 'date') => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }: FilterDropdownProps) => (
@@ -142,7 +145,7 @@ const App: React.FC = () => {
       render: (value) => (
         <Space>
           <CalendarOutlined style={{ color: 'grey' }} />
-          <span>{value}</span>
+          <span>{dayjs(value).format('DD/MM/YYYY')}</span>
         </Space>
       ),
       ...getColumnSearchProps('data_conclusion', 'date')
@@ -155,7 +158,7 @@ const App: React.FC = () => {
       render: (value) => (
         <Space>
           <CalendarOutlined style={{ color: 'grey' }} />
-          <span>{value}</span>
+          <span>{dayjs(value).format('DD/MM/YYYY')}</span>
         </Space>
       ),
       ...getColumnSearchProps('data_conclusion', 'date')
@@ -165,18 +168,33 @@ const App: React.FC = () => {
       dataIndex: 'action',
       align: 'center',
       width: '15%',
-      render: () => (
+      render: (_, record) => (
         <Space>
-          <Button shape='circle' size='middle'><EditOutlined /></Button>
-          <Button shape='circle' size='middle'><DeleteOutlined /></Button>
+          <Link to={`${record.id}/edit`}><Button shape='circle' size='middle'><EditOutlined /></Button></Link>
+          <Popconfirm
+            title="Deseja mesmo remover esta tarefa?"
+            okText="Sim"
+            cancelText="Não"
+            onConfirm={() => { removeTask(record.id) }}
+          >
+            <Button shape='circle' size='middle'><DeleteOutlined /></Button>
+          </Popconfirm>
         </Space>
       )
     },
   ];
 
-  useEffect(() => {
-    fetchData({});
-  }, []);
+  const updateDataSource = (record: DataType) => {
+    const updatedDataSource = data?.map((item) => (
+      item.id == record.id ? record : item
+    ))
+    setData(updatedDataSource)
+  }
+
+  const deleteDataSource = (id: string) => {
+    const updatedDataSource = data?.filter((item) => item.id !== id)
+    setData(updatedDataSource)
+  }
 
   const fetchData = (params: object) => {
     setLoading(true)
@@ -209,7 +227,7 @@ const App: React.FC = () => {
     sorter
   ) => {
 
-    var newSorter: SorterResult<DataType> = {}
+    const newSorter: SorterResult<DataType> = {}
 
     if (!Array.isArray(sorter)) {
       newSorter.field = sorter.field
@@ -226,6 +244,39 @@ const App: React.FC = () => {
     })
   };
 
+  const removeTask = (taskId: string) => {
+    api.delete(`tasks/${taskId}`)
+      .then(res => res.data)
+      .then(res => {
+        messageApi.success({
+          type: 'success',
+          content: res.message
+        })
+        deleteDataSource(taskId)
+      })
+      .catch(error => {
+        messageApi.error({
+          type: 'error',
+          content: error.response.data.message
+        })
+      })
+  }
+
+  useEffect(() => {
+    fetchData({});
+  }, []);
+
+  useEffect(() => {
+    if (state?.updated == true) {
+      messageApi.success({
+        type: 'success',
+        content: state.message
+      })
+
+      updateDataSource(state.data)
+    }
+  }, [state])
+
   return (
     <>
       {contextHolder}
@@ -238,8 +289,9 @@ const App: React.FC = () => {
         loading={loading}
         onChange={handleTableChange}
       />
+      <Outlet />
     </>
   );
 };
 
-export default App;
+export default ScreenTaskList;

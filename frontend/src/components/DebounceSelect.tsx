@@ -7,13 +7,14 @@ export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType | ValueType[]>, 'options' | 'children'> {
   fetchOptions: (search: string) => Promise<ValueType[]>;
   debounceTimeout?: number;
+  defaultOptions: ValueType[];
 }
 
 function DebounceSelect<
   ValueType extends { key?: string; label: React.ReactNode; value: string } = any,
->({ fetchOptions, debounceTimeout = 800, ...props }: DebounceSelectProps<ValueType>) {
+>({ fetchOptions, debounceTimeout = 800, defaultOptions, ...props }: DebounceSelectProps<ValueType>) {
   const [fetching, setFetching] = useState(false);
-  const [options, setOptions] = useState<ValueType[]>([]);
+  const [options, setOptions] = useState<ValueType[]>(defaultOptions);
   const fetchRef = useRef(0);
 
   const debounceFetcher = useMemo(() => {
@@ -35,7 +36,7 @@ function DebounceSelect<
     };
 
     return debounce(loadOptions, debounceTimeout)
-    
+
   }, [fetchOptions, debounceTimeout]);
 
   return (
@@ -44,8 +45,8 @@ function DebounceSelect<
       filterOption={false}
       onSearch={debounceFetcher}
       notFoundContent={fetching ? <Spin size="small" /> : null}
-      {...props}
       options={options}
+      {...props}
     />
   );
 }

@@ -21,17 +21,17 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function dateConclusion(): Attribute
-    {
-        return  Attribute::make(
-            get: fn ($value) => date('d/m/Y', strtotime($value))
-        );
-    }
+    // public function dateConclusion(): Attribute
+    // {
+    //     return  Attribute::make(
+    //         get: fn ($value) => date('d/m/Y', strtotime($value))
+    //     );
+    // }
 
-    public function createdAt(): Attribute
-    {
-        return  Attribute::make(
-            get: fn ($value) => date('d/m/Y', strtotime($value))
-        );
-    }
+    // public function createdAt(): Attribute
+    // {
+    //     return  Attribute::make(
+    //         get: fn ($value) => date('d/m/Y', strtotime($value))
+    //     );
+    // }
 }

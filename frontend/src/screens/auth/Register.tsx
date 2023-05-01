@@ -6,7 +6,7 @@ import { Form, Input, Card, Row, Col, Button, message } from "antd"
 import { setToken } from "../../services/auth"
 import api from "../../services/api"
 
-const ScreenUserRegister = () => {
+const ScreenAuthRegister = () => {
 
   const [formLoading, setFormLoading] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
@@ -150,4 +150,4 @@ const ScreenUserRegister = () => {
   )
 }
 
-export default ScreenUserRegister
+export default ScreenAuthRegister

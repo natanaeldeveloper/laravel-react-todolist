@@ -94,6 +94,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $task->load('responsible');
+
         return response()->json([
             'data' => $task,
         ]);
@@ -107,6 +109,8 @@ class TaskController extends Controller
         $data = $request->only('description', 'date_conclusion', 'responsible_id');
 
         $task->update($data);
+
+        $task->load('responsible');
 
         return response()->json([
             'message' => 'Tarefa atualizada com sucesso!',
