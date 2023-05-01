@@ -45,9 +45,9 @@ class UpdateUserRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Nome',
-            'email' => 'Email',
-            'password' => 'Senha',
+            'name' => 'nome',
+            'email' => 'email',
+            'password' => 'senha',
         ];
     }
 }

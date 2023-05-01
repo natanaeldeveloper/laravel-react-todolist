@@ -24,7 +24,7 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'description' => 'required|min:3|max:255',
-            'date_conclusion' => 'date',
+            'date_conclusion' => 'required|date',
             'responsible_id' => 'required|exists:users,id',
         ];
     }
@@ -32,9 +32,9 @@ class StoreTaskRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'description' => 'Descrição',
-            'date_conclusion' => 'Data conclusão',
-            'responsible_id' => 'Responsável',
+            'description' => 'descrição',
+            'date_conclusion' => 'data de conclusão',
+            'responsible_id' => 'responsável',
         ];
     }
 }

@@ -32,9 +32,9 @@ class UpdateTaskRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'description' => 'Descrição',
-            'date_conclusion' => 'Data conclusão',
-            'responsible_id' => 'Responsável',
+            'description' => 'descrição',
+            'date_conclusion' => 'data conclusão',
+            'responsible_id' => 'responsável',
         ];
     }
 }

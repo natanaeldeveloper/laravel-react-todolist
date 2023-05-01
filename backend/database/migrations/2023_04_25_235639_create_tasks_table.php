@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('description');
             $table->foreignId('responsible_id')->nullable();
-            $table->date('date_conclusion')->nullable();
+            $table->date('date_conclusion');
             $table->timestamps();
 
             $table->foreign('responsible_id')

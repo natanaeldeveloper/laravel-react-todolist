@@ -39,34 +39,33 @@ class TaskController extends Controller
             });
         }
 
+        if ($request->has('sorter')) {
 
-        if ($request->has('sorter') && $request->input('sorter.field') != 'responsible') {
-
+            $order = $request->input('sorter.order') == 'ascend' ? 'ASC' : 'DESC';
             $column = 'tasks.' . $request->input('sorter.field');
-            $order = $request->input('sorter.order') == 'ascend' ? 'ASC' : 'DESC';
 
-            $tasks = $tasks
-                ->with('responsible')
-                ->orderBy($column, $order)
-                ->paginate($per_page);
-        } else if ($request->has('sorter') && $request->input('sorter.field') == 'responsible') {
+            if ($request->input('sorter.field') != 'responsible') {
 
-            $order = $request->input('sorter.order') == 'ascend' ? 'ASC' : 'DESC';
+                $tasks = $tasks
+                    ->with('responsible')
+                    ->orderBy($column, $order)
+                    ->paginate($per_page);
+            } else if ($request->input('sorter.field') == 'responsible') {
 
-            $tasks = $tasks
-                ->join('users as responsible', 'responsible.id', '=', 'tasks.responsible_id')
-                ->with('responsible')
-                ->select(
-                    'tasks.id',
-                    'tasks.description',
-                    'tasks.date_conclusion',
-                    'tasks.created_at',
-                    'responsible.id as responsible_id'
-                )
-                ->orderBy('responsible.name', $order)
-                ->paginate($per_page);
+                $tasks = $tasks
+                    ->join('users as responsible', 'responsible.id', '=', 'tasks.responsible_id')
+                    ->with('responsible')
+                    ->select(
+                        'tasks.id',
+                        'tasks.description',
+                        'tasks.date_conclusion',
+                        'tasks.created_at',
+                        'responsible.id as responsible_id'
+                    )
+                    ->orderBy('responsible.name', $order)
+                    ->paginate($per_page);
+            }
         } else {
-
             $tasks = $tasks
                 ->with('responsible')
                 ->paginate($per_page);
@@ -85,6 +84,7 @@ class TaskController extends Controller
         $task = Task::create($data);
 
         return response()->json([
+            'message' => 'Tarefa cadastrada com sucesso!',
             'data' => $task,
         ], 201);
     }
