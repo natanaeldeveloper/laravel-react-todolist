@@ -31,7 +31,7 @@ git clone https://github.com/natanaeldeveloper/test-todo-list-app.git
 
 ## Configuração e inicialização do back-end
 
-1. acesse a pasta do `backend` projeto
+1. acesse a pasta `backend` do projeto
 ```bash
 cd test-todo-list-app/backend
 ```
@@ -66,14 +66,14 @@ php artisan db:seed
 
 # Este comando persistirá no banco 30 usuários e 100 tarefas aleatoriamente.
 ```
-8. Inicialize o projeto e pronto. O back-end já estará em execução!
+8. Inicialize o servidor e pronto. O back-end já estará em execução!
 ```bash
 php artisan serve
 
 # http://localhost:8000
 ```
 
-## Configuração do front-end
+## Configuração e inicialização do front-end
 1. acesse a pasta `frontend` do projeto
 ```bash
 cd test-todo-list-app/frontend
