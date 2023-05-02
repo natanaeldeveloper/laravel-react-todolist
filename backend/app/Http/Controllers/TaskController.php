@@ -16,7 +16,7 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $tasks = Task::query();
-        $per_page = $request->input('per_page') ? $request->input('per_page') : 7;
+        $per_page = $request->input('per_page') ? $request->input('per_page') : 10;
 
         if ($request->has('filters.description')) {
             $tasks->where('description', 'ilike', '%' . $request->input('filters.description')[0] . '%');
