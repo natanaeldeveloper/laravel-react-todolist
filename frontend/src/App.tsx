@@ -1,9 +1,4 @@
-import {
-  createBrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Welcome from "./screens/Welcome";
 import ScreenAuthLogin from "./screens/auth/Login";
 import ScreenAuthRegister from "./screens/auth/Register";
@@ -16,13 +11,17 @@ import { getToken } from "./services/auth";
 import ScreenUserDelete from "./screens/user/Delete";
 import NotFound from "./screens/error/NotFound";
 
-const RoutePrivate = ({ children }) => {
-  return getToken() ? children : <Navigate to='/login' />
+interface RouteProps {
+  children: React.ReactElement;
 }
 
-const RoutesLoggedOut = ({ children }) => {
-  return !getToken() ? children : <Navigate to='/dashboard/tasks' />
-}
+const RoutePrivate = ({ children }: RouteProps) => (
+  getToken() ? children : <Navigate to='/login' />
+)
+
+const RoutesLoggedOut = ({ children }: RouteProps) => (
+  !getToken() ? children : <Navigate to='/dashboard/tasks' />
+)
 
 const router = createBrowserRouter([
   {

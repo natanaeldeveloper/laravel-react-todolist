@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        \App\Models\User::factory(15)->create();
+        \App\Models\User::factory(30)->create();
         \App\Models\Task::factory(100)->create();
     }
 }
