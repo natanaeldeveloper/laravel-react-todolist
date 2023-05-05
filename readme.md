@@ -21,6 +21,13 @@ Este sistema deve permitir que um usuário crie tarefas, atribua a um responsáv
 - Ant-Design
 - Postgres
 
+## Requisitos
+
+- php >= 8.2
+- composer
+- node 
+- postgres
+
 ## Instalação
 
 1. Clone o repositório
